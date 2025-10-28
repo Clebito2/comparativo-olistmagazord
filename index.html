@@ -72,7 +72,8 @@
             top: 0;
             left: 0;
             width: 100%;
-            padding: var(--space-sm) var(--space-md);
+            /* Padding vertical reduzido para diminuir a altura */
+            padding: 0.5rem var(--space-md); 
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -84,13 +85,15 @@
         }
 
         .header-fixed .logo {
-            width: 150px;
+            /* Largura da logo reduzida para diminuir a altura */
+            width: 120px; 
             height: auto;
         }
 
         /* Espaçador para compensar o header fixo */
         main {
-            padding-top: 100px; /* Altura aproximada do header */
+            /* Padding-top ajustado para a nova altura do header */
+            padding-top: 80px; 
         }
 
         .container {
@@ -444,7 +447,7 @@
         </div>
     </main>
 
-<!-- Rodapé (Logo de Proposta) --><footer>
+    <!-- Rodapé (Logo de Proposta) --><footer>
         <p style="color: var(--text-subtle); font-size: var(--font-size-base);">Live - 2025</p>
     </footer>
 
@@ -483,5 +486,4 @@
 
 </body>
 </html>
-
 
