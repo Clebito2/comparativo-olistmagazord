@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Comparativa - Magazord vs Olist</title>
+
+    <!-- Importação de Fontes (Guia de Estilo V3) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. Núcleo da Identidade Visual (Tokens) --- */
+        :root {
+            /* Paleta Principal */
+            --primary-bg: #06192a;
+            --card-bg: #0A243D;
+            --accent-color: #00e800;
+
+            /* Textos */
+            --text-primary: #ffffff;
+            --text-muted: #cccccc;
+            --text-subtle: #a0a0a0;
+
+            /* Bordas e Efeitos */
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-glow: 0 0 8px rgba(0, 232, 0, 0.7);
+
+            /* Tipografia */
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Merriweather', serif; /* Reservado para Diagnóstico */
+
+            /* Tamanhos de Fonte (Mobile-First) */
+            --font-size-base: 1.1rem;
+            --font-size-h3: 1.5rem;
+            --font-size-h2: clamp(2rem, 4vw, 2.5rem);
+            --font-size-h1: clamp(2.5rem, 5vw, 3rem);
+
+            /* Escala de Espaçamento */
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 6rem;
+        }
+
+        /* --- 2. Configuração Base e Fundo --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--primary-bg);
+            /* Textura de Fundo Fixa (Guia de Estilo V3) */
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            background-attachment: fixed;
+            background-size: auto;
+            overflow-x: hidden;
+        }
+
+        /* --- 3. Estrutura e Layout --- */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            /* Efeito de blur (Guia de Estilo V3) */
+            background-color: rgba(6, 25, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-fixed .logo {
+            width: 150px;
+            height: auto;
+        }
+
+        /* Espaçador para compensar o header fixo */
+        main {
+            padding-top: 100px; /* Altura aproximada do header */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-md) 0;
+        }
+
+        section {
+            margin-bottom: var(--space-lg);
+        }
+
+        footer {
+            padding: var(--space-lg) var(--space-md);
+            text-align: center;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            margin-top: var(--space-xl);
+        }
+
+        footer .logo {
+            width: 180px;
+            height: auto;
+            opacity: 0.8;
+        }
+
+        /* --- 4. Componentes --- */
+        
+        /* Card Padrão (Guia de Estilo V3) */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: var(--space-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Estados de Interação (Guia de Estilo V3) */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:focus-visible,
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 4px;
+            box-shadow: none;
+        }
+
+        /* Grid para múltiplos cards */
+        .grid-cards {
+            display: grid;
+            gap: var(--space-md);
+            grid-template-columns: 1fr; /* Mobile-first: 1 coluna */
+        }
+
+        /* Media query para telas maiores (tablets e desktops) */
+        @media (min-width: 768px) {
+            .grid-cards {
+                grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid-cards {
+                grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+            }
+        }
+
+
+        /* Tabela Comparativa */
+        .table-wrapper {
+            overflow-x: auto; /* Permite scroll horizontal em telas pequenas */
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-sm);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--space-sm);
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        .comparison-table th {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .comparison-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Card de Diagnóstico (Guia de Estilo V3) */
+        .diagnostic-card {
+            border-left: 3px solid var(--accent-color);
+            /* Um leve gradiente para diferenciar, mantendo o --card-bg */
+            background: linear-gradient(90deg, rgba(0, 232, 0, 0.05) 0%, var(--card-bg) 20%);
+        }
+        .diagnostic-card p, 
+        .diagnostic-card li {
+            /* Fonte Secundária para Diagnóstico (Guia de Estilo V3) */
+            font-family: var(--font-secondary); 
+            font-size: 1.15rem; /* Um pouco maior para leitura */
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* --- 5. Tipografia e Conteúdo --- */
+        h1, h2, h3 {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        h1 {
+            font-size: var(--font-size-h1);
+            color: var(--accent-color);
+            text-shadow: var(--accent-glow);
+        }
+
+        h2 {
+            font-size: var(--font-size-h2);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        h3 {
+            font-size: var(--font-size-h3);
+            color: var(--accent-color);
+        }
+
+        p, li {
+            font-size: var(--font-size-base);
+            color: var(--text-subtle);
+            margin-bottom: var(--space-sm);
+        }
+
+        ul, ol {
+            padding-left: var(--space-md);
+        }
+        
+        strong {
+            color: var(--text-muted);
+        }
+
+        /* --- 6. Animações (Guia de Estilo V3) --- */
+        @keyframes fadeln {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* A animação é aplicada via JS, mas a preparação é via CSS */
+        .fade-in {
+            opacity: 0; /* Começa invisível */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho Fixo (Logo de Proposta) -->
+    <header class="header-fixed">
+        <img src="https://raw.githubusercontent.com/Clebito2/layout/main/Logo%20live%20oficial-36.png" 
+             alt="Logo Live Consultoria" 
+             class="logo"
+             loading="eager"> <!-- Eager pois está no topo -->
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <div class="container">
+
+            <!-- Seção de Título e Cliente -->
+            <section class="title-section">
+                <h1>Análise Comparativa</h1>
+                <p style="font-size: 1.5rem; color: var(--text-muted);">Plataformas de E-commerce para <strong>Virtual Distribuidora</strong></p>
+            </section>
+
+            <!-- Seção de Resumo Executivo -->
+            <section class="card fade-in">
+                <h3>Resumo Executivo</h3>
+                <p>
+                    A análise revela duas abordagens distintas: a <strong>Magazord</strong> se posiciona como uma plataforma "all-in-one" (tudo em um) com ERP e pagamentos integrados, originada de uma necessidade varejista. O <strong>Olist</strong> opera como um "ecossistema" modular, unindo soluções adquiridas (como Tiny ERP e Vnda E-commerce) e oferecendo forte apelo omnichannel.
+                </p>
+                <p>
+                    A Magazord propõe um projeto customizado com alto custo inicial e prazo longo, enquanto o Olist oferece um modelo SaaS (Software as a Service) com setup gratuito ou customizado, baseado em assinatura mensal mais um percentual sobre as vendas.
+                </p>
+            </section>
+
+            <!-- Seção de Tabela Comparativa -->
+            <section>
+                <h2>Comparativo Geral</h2>
+                <div class="card fade-in">
+                    <div class="table-wrapper">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Aspecto</th>
+                                    <th>Magazord (Proposta Específica)</th>
+                                    <th>Olist (Planos E-commerce Públicos)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Modelo</td>
+                                    <td>Plataforma "All-in-one" (ERP + E-commerce + Pagamentos)</td>
+                                    <td>Ecossistema modular (ERP + E-commerce + Hub + PDV + Conta)</td>
+                                </tr>
+                                <tr>
+                                    <td>Custo de Setup</td>
+                                    <td><strong>R$ 19.990,00</strong> (Pago à vista)</td>
+                                    <td><strong>Gratuito</strong> (Básico) ou <strong>R$ 15.000,00</strong> (Customizado)</td>
+                                </tr>
+                                <tr>
+                                    <td>Prazo de Setup</td>
+                                    <td><strong>180 dias</strong></td>
+                                    <td><strong>30 dias</strong> (Básico) ou <strong>90 dias</strong> (Customizado)</td>
+                                </tr>
+                                <tr>
+                                    <td>Custo Mensal</td>
+                                    <td><strong>Variável:</strong> Comissão sobre faturamento (ex: 2,50% até R$199k)</td>
+                                    <td><strong>Fixo + Variável:</strong> Plano (ex: R$ 349) + 0,95% sobre vendas</td>
+                                </tr>
+                                <tr>
+                                    <td>Piso Mensal</td>
+                                    <td>Mínimo de <strong>R$ 799,00</strong></td>
+                                    <td>O valor fixo do plano (ex: <strong>R$ 349/mês</strong>)</td>
+                                </tr>
+                                <tr>
+                                    <td>Taxa (Boleto)</td>
+                                    <td><strong>R$ 1,99</strong> (por transação aprovada)</td>
+                                    <td><strong>R$ 1,79</strong> (Plano Impulsione)</td>
+                                </tr>
+                                <tr>
+                                    <td>Taxa (PIX)</td>
+                                    <td><strong>R$ 1,99</strong> (por transação aprovada)</td>
+                                    <td><strong>R$ 0,50</strong> (Plano Impulsione, QR Code)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Análise Detalhada -->
+            <section>
+                <h2>Análise Detalhada</h2>
+                <div class="grid-cards">
+                    
+                    <div class="card fade-in">
+                        <h3>Modelo de Negócio</h3>
+                        <p><strong>Magazord:</strong> Solução unificada, criada por varejistas (Cissa Magazine). O foco é ter todas as ferramentas nativas, de ERP a pagamentos, em um só painel.</p>
+                        <p><strong>Olist:</strong> Um ecossistema de soluções adquiridas (Tiny ERP, Vnda). O e-commerce se integra nativamente ao ERP da Olist, mas também pode conectar-se a outros.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Estrutura de Custos</h3>
+                        <p><strong>Magazord:</strong> Exige alto investimento inicial (R$ 19.990) e um custo mensal 100% variável (comissão), mas com um piso de R$ 799. Mais próximo de um projeto customizado.</p>
+                        <p><strong>Olist:</strong> Modelo SaaS flexível. Permite começar com setup gratuito e um custo fixo baixo + comissão. Escala o custo conforme o crescimento.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Taxas de Pagamento</h3>
+                        <p><strong>Magazord:</strong> Taxas fixas (R$ 1,99) para PIX e Boleto. Oferece diferenciais como pagamento com dois cartões e "boleto + cartão".</p>
+                        <p><strong>Olist:</strong> Taxas mais competitivas (R$ 0,50 PIX, R$ 1,79 Boleto) que diminuem conforme o plano do cliente avança, incentivando o upgrade.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Foco em Omnichannel</h3>
+                        <p><strong>Olist:</strong> É um pilar central da oferta. Destaca explicitamente "Pick Up in Store", "Ship from Store" e "Prateleira Infinita" como funcionalidades nativas.</p>
+                        <p><strong>Magazord:</strong> Foca mais na integração com marketplaces e na oferta de um App da marca. Não deu ênfase a funcionalidades omnichannel na apresentação.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Ferramentas de Marketing</h3>
+                        <p><strong>Olist:</strong> Apresenta um pilar "Growth" robusto com ferramentas nativas para impulsionar recompra, como "Vnda Bônus" (Cashback), "Indique e Ganhe" e "Order Bump".</p>
+                        <p><strong>Magazord:</strong> As ferramentas de marketing mencionadas são mais operacionais, como gestão de cupons e promoções, sem foco em automação de recompra.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Internacionalização</h3>
+                        <p><strong>Magazord:</strong> Oferece um módulo explícito chamado "Cross Border" para exportação e vendas em moedas estrangeiras.</p>
+                        <p><strong>Olist:</strong> Menciona "Internacional" apenas como um recurso disponível no Setup Customizado, sugerindo ser uma funcionalidade mais complexa e não padrão.</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- NOVA SEÇÃO: Análise de Requisitos Específicos -->
+            <section>
+                <h2>Análise de Requisitos Específicos (Casa Goianita)</h2>
+                
+                <!-- Card de Diagnóstico Estratégico -->
+                <div class="card fade-in diagnostic-card" style="margin-bottom: var(--space-md);">
+                    <h3>Diagnóstico: Requisito Crítico (Listas de Casamento)</h3>
+                    <p>O principal desafio do projeto, e ponto de insatisfação com a plataforma atual (Avetex), é a necessidade de uma funcionalidade de "Lista de Casamento" altamente customizada:</p>
+                    <ul>
+                        <li>Listas pré-definidas para que os noivos selecionem pacotes de presentes.</li>
+                        <li>Recebimento do valor total dos presentes em forma de <strong>voucher ou créditos</strong>.</li>
+                        <li><strong>Ponto Crítico:</strong> A flexibilidade para usar esses créditos em uma <strong>rede de parceiros externos</strong> (ex: agências de viagem), funcionando como uma "moeda própria" e não apenas para produtos da Casa Goianita.</li>
+                    </ul>
+                </div>
+
+                <!-- Grid para Posições -->
+                <div class="grid-cards">
+                    <div class="card fade-in">
+                        <h3>Posicionamento - Olist</h3>
+                        <p>Em reunião (com Erick), foi confirmado que a plataforma Olist <strong>atende a maior parte das necessidades</strong> de ERP, PDV, finanças e marketplaces.</p>
+                        <p>No entanto, a funcionalidade de "voucher para parceiros externos" é complexa e <strong>não é um recurso padrão</strong>. Seria necessário um <strong>desenvolvimento customizado</strong> (à parte) para criar essa rede.</p>
+                        <p>A Olist <strong>oferece nativamente</strong> (integrado ao ERP) os recursos de <strong>cashback</strong>, <strong>vale-presente</strong> e <strong>programas de indicação</strong>, que podem servir como base técnica para a customização.</p>
+                    </div>
+
+                    <div class="card fade-in">
+                        <h3>Posicionamento - Magazord</h3>
+                        <p>A proposta comercial da Magazord foca na plataforma "all-in-one" e suas funcionalidades padrão (pagamentos, frete, ERP, marketplaces).</p>
+                        <p>A documentação <strong>não detalha a capacidade</strong> de lidar com o requisito específico de listas de casamento com vouchers para parceiros externos.</p>
+                        <p>Esta é uma funcionalidade que <strong>precisaria ser validada</strong> diretamente com a equipe técnica da Magazord, pois muito provavelmente também exigiria um <strong>desenvolvimento customizado</strong>.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Rodapé (Logo de Proposta) -->
+    <footer>
+        <img src="https://raw.githubusercontent.com/Clebito2/layout/main/Logo%20live%20oficial-34.png" 
+             alt="Logo Live Consultoria - Versão Positiva" 
+             class="logo"
+             loading="lazy"> <!-- Lazy pois está no fim da página -->
+    </footer>
+
+    <!-- Script para Animação (Guia de Estilo V3) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Seleciona todos os elementos que devem ter animação de fade-in
+            const animatedElements = document.querySelectorAll('.fade-in');
+
+            if ("IntersectionObserver" in window) {
+                // Cria o observador
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        // Se o elemento está visível
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            // Para de observar o elemento após a animação
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { 
+                    threshold: 0.1 // A animação começa quando 10% do elemento está visível
+                });
+
+                // Observa cada elemento
+                animatedElements.forEach(element => {
+                    observer.observe(element);
+                });
+            } else {
+                // Fallback para navegadores antigos: mostra tudo de uma vez
+                animatedElements.forEach(element => {
+                    element.classList.add('is-visible');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+
