@@ -78,9 +78,9 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            /* Efeito de blur (Guia de Estilo V3) */
-            background-color: rgba(6, 25, 42, 0.8);
-            backdrop-filter: blur(10px);
+            /* Header sólido, sem efeito fosco/blur */
+            background-color: var(--primary-bg);
+            /* backdrop-filter: blur(10px); -- REMOVIDO */
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -113,12 +113,6 @@
             background-color: var(--card-bg);
             border-top: 1px solid var(--border-color);
             margin-top: var(--space-xl);
-        }
-
-        footer .logo {
-            width: 180px;
-            height: auto;
-            opacity: 0.8;
         }
 
         /* --- 4. Componentes --- */
@@ -284,7 +278,7 @@
 <body>
 
     <!-- Cabeçalho Fixo (Logo de Proposta) --><header class="header-fixed">
-        <img src="Logo live oficial-36.png"
+        <img src="https://raw.githubusercontent.com/Clebito2/ApresentacaoConsultoria/main/Logo%20live%20oficial-36.png" 
              alt="Logo Live Consultoria" 
              class="logo"
              loading="eager"> <!-- Eager pois está no topo --></header>
